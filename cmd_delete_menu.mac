@@ -1,0 +1,57 @@
+﻿/*秀丸エディタのウインドウ系メニュー
+
+
+# 連絡先
+https://github.com/ohtorii/everything	<br>
+http://d.hatena.ne.jp/ohtorii/			<br>
+https://twitter.com/ohtorii				<br>
+*/
+
+#K_SHIFT	= 0x10;
+
+
+call Initialize;
+call Main;
+endmacro;
+
+
+Initialize:
+	#num=0;
+
+
+	$root[#num]="U)カーソル位置から行頭まで削除";
+	$label[#num]="UnixLineDiscard";//unix line discard
+	#num=#num+1;
+
+	$root[#num]="K)カーソル位置から行頭まで削除";
+	$label[#num]="KillLine";//kill line
+	#num=#num+1;
+
+
+	return ;
+
+
+Main:
+	setcompatiblemode 0x00100000;	//複数選択として動作
+	setmenudelay 500;
+	menuarray $root,#num;
+	if(result==0){
+		return;
+	}
+	##index=result-1;
+	$$name=$label[##index];
+	if ($$name==""){
+		return ;
+	}
+	call $$name;
+	return ;
+
+
+UnixLineDiscard:
+	deletebefore;
+	return ;
+
+KillLine:
+	deleteafter;
+	return ;
+
