@@ -18,15 +18,80 @@ endmacro;
 Initialize:
 	#num=0;
 
-
+	//行単位
 	$root[#num]="U)カーソル位置から行頭まで削除";
-	$label[#num]="UnixLineDiscard";//unix line discard
+	$label[#num]="UnixLineDiscard";
 	#num=#num+1;
 
 	$root[#num]="K)カーソル位置から行頭まで削除";
-	$label[#num]="KillLine";//kill line
+	$label[#num]="KillLine";
 	#num=#num+1;
 
+	$root[#num]="L)行削除";
+	$label[#num]="DeleteLine";
+	#num=#num+1;
+
+	$root[#num]="\x01";
+	#num=#num+1;
+
+	//連続するXXX
+	$root[#num]="C)（準備中）連続する同一色を削除";
+	$label[#num]="DeleteSequentialColor";
+	#num=#num+1;
+
+	$root[#num]=")（準備中）カーソル位置にある連続する文字を削除する";
+	$label[#num]="DeleteSequentialChar";
+	#num=#num+1;
+
+	$root[#num]="\x01";
+	#num=#num+1;
+
+	//単語単位
+	$root[#num]=")カーソル位置の単語を削除";
+	$label[#num]="DeleteWorld";
+	#num=#num+1;
+
+	$root[#num]=")カーソルより前の単語を削除";
+	$label[#num]="BackwardKillWord";
+	#num=#num+1;
+
+	$root[#num]="D)カーソルより後ろの単語を削除";
+	$label[#num]="KillWord";
+	#num=#num+1;
+
+	$root[#num]="W)（準備中）前の単語削除(スペースで区切られているものを単語とする)";
+	$label[#num]="UnixWordRubout";
+	#num=#num+1;
+
+
+	$root[#num]="\x01";
+	#num=#num+1;
+
+	//囲まれている範囲を削除
+	$root[#num]=")（準備中）カーソルに最も近い括弧内の文字列を削除";
+	$label[#num]="Kakko";
+	#num=#num+1;
+
+	$root[#num]=")（準備中）タグ内の文字を削除";
+	$label[#num]="Tag";
+	#num=#num+1;
+
+	$root[#num]="\x01";
+	#num=#num+1;
+
+
+	//マーク
+	$root[#num]=")（準備中）カーソル行から直前のマーク行まで削除";
+	$label[#num]="BeforeMark";
+	#num=#num+1;
+
+	$root[#num]=")（準備中）カーソル行から直後のマーク行まで削除";
+	$label[#num]="AfterMark";
+	#num=#num+1;
+
+	$root[#num]=")（準備中）カーソル位置から最後に編集した行まで削除";
+	$label[#num]="LastEdit";
+	#num=#num+1;
 
 	return ;
 
@@ -55,3 +120,43 @@ KillLine:
 	deleteafter;
 	return ;
 
+DeleteLine:
+	deleteline2;
+	return ;
+
+DeleteSequentialColor:
+	return ;
+
+DeleteSequentialChar:
+	return ;
+
+DeleteWorld:
+	deletewordall;
+	return ;
+
+BackwardKillWord:
+	deletewordfront;
+	return ;
+
+KillWord:
+	deleteword;
+	return ;
+
+UnixWordRubout:
+	return ;
+
+Kakko:
+	return ;
+
+Tag:
+	return ;
+
+BeforeMark:
+	return ;
+
+AfterMark:
+	return ;
+
+LastEdit:
+	return
+	;
