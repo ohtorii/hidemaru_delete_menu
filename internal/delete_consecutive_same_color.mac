@@ -1,0 +1,119 @@
+﻿/*カーソル位置の連続する同一色の文字を削除します。
+
+# 連絡先
+https://github.com/ohtorii/everything
+http://d.hatena.ne.jp/ohtorii/
+https://twitter.com/ohtorii
+*/
+
+#old_column=column;
+#old_lineno=lineno;
+call main;
+endmacro;
+
+main:
+	disabledraw;
+	##current_colorcode = colorcode;
+
+	call checker "left_function", ##current_colorcode;
+	##left_column=column;
+	##left_lineno=lineno;
+
+	call restore_cursor_position;
+	call checker "right_function", ##current_colorcode;
+	//column+1の理由は　checker　ラベルのコメントを参照。
+	##right_column=column+1;
+	##right_lineno=lineno;
+
+	call select_range ##left_column, ##left_lineno, ##right_column, ##right_lineno;
+	delete;
+
+	//call restore_cursor_position;
+	return ;
+
+
+left_function:
+	left;
+	if(!result){
+		return false;
+	}
+	if(code != 0x0D){
+		return true;
+	}
+	//行末の場合（一行上へ移動している）
+	if(column==0){
+		right;			//空行なので元の位置へ戻る
+		return false;	//これ以上移動しない
+	}
+	left;
+	return result;
+
+
+right_function:
+	right;
+	if(!result){
+		return false;
+	}
+	if(code != 0x0D){
+		return true;
+	}
+
+	right;				//改行コードを読み飛ばす
+	if(! result){
+		return false;
+	}
+
+	//行頭の場合（一行下へ移動している）
+	if(linelen2==0){
+		left;			//空行なので元の位置へ戻る
+		return false;	//これ以上移動しない
+	}
+	return true;
+
+
+/*
+（動作例）
+!,@,#の記号は異なる色を表します。
+|はカーソル位置です。
+
+   !!@@|@@@##
+
+   返すカーソル位置は以下になります。
+   !!|@@@@|@##
+*/
+checker:
+	$$callback=$$1;
+	##current_colorcode=##2;
+	while(true){
+		##prev_column=column;
+		##prev_lineno=lineno;
+		call $$callback;
+		if(! ##return){
+			//カーソルが移動しない場合（ファイル先頭など）
+			break;
+		}
+		if(colorcode != ##current_colorcode){
+			//色が異なる
+			moveto2 ##prev_column, ##prev_lineno;
+			break;
+		}
+	}
+	return ;
+
+
+restore_cursor_position:
+	moveto2 #old_column, #old_lineno;
+	return ;
+
+
+select_range:
+	##left_column=##1;
+	##left_lineno=##2;
+	##right_column=##3;
+	##right_lineno=##4;
+	escape;
+	moveto2 ##left_column,  ##left_lineno;
+	beginsel;
+	moveto2 ##right_column, ##right_lineno;
+	endsel;
+	return ;
