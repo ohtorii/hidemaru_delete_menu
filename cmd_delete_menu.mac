@@ -2,9 +2,9 @@
 
 
 # 連絡先
-https://github.com/ohtorii/everything	<br>
-http://d.hatena.ne.jp/ohtorii/			<br>
-https://twitter.com/ohtorii				<br>
+https://github.com/ohtorii/everything
+http://d.hatena.ne.jp/ohtorii/
+https://twitter.com/ohtorii
 */
 
 #K_SHIFT	= 0x10;
@@ -35,7 +35,7 @@ Initialize:
 	#num=#num+1;
 
 	//連続するXXX
-	$root[#num]="C)（準備中）連続する同一色を削除";
+	$root[#num]="C)連続する同一色を削除";
 	$label[#num]="DeleteSequentialColor";
 	#num=#num+1;
 
@@ -125,6 +125,7 @@ DeleteLine:
 	return ;
 
 DeleteSequentialColor:
+	execmacro currentmacrodirectory+"\\internal\\delete_consecutive_same_color.mac";
 	return ;
 
 DeleteSequentialChar:
