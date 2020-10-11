@@ -19,11 +19,11 @@ Initialize:
 	#num=0;
 
 	//行単位
-	$root[#num]="U)カーソル位置から行頭まで削除";
+	$root[#num]="U)行頭まで削除";
 	$label[#num]="UnixLineDiscard";
 	#num=#num+1;
 
-	$root[#num]="K)カーソル位置から行頭まで削除";
+	$root[#num]="K)行末まで削除";
 	$label[#num]="KillLine";
 	#num=#num+1;
 
@@ -39,7 +39,7 @@ Initialize:
 	$label[#num]="DeleteSequentialColor";
 	#num=#num+1;
 
-	$root[#num]=")（準備中）カーソル位置にある連続する文字を削除する";
+	$root[#num]=")（準備中）連続する文字を削除する";
 	$label[#num]="DeleteSequentialChar";
 	#num=#num+1;
 
@@ -47,15 +47,15 @@ Initialize:
 	#num=#num+1;
 
 	//単語単位
-	$root[#num]=")カーソル位置の単語を削除";
+	$root[#num]=")単語を削除";
 	$label[#num]="DeleteWorld";
 	#num=#num+1;
 
-	$root[#num]=")カーソルより前の単語を削除";
+	$root[#num]=")前の単語を削除";
 	$label[#num]="BackwardKillWord";
 	#num=#num+1;
 
-	$root[#num]="D)カーソルより後ろの単語を削除";
+	$root[#num]="D)後ろの単語を削除";
 	$label[#num]="KillWord";
 	#num=#num+1;
 
@@ -68,7 +68,7 @@ Initialize:
 	#num=#num+1;
 
 	//囲まれている範囲を削除
-	$root[#num]=")（準備中）カーソルに最も近い括弧内の文字列を削除";
+	$root[#num]="B)括弧の内側を削除";
 	$label[#num]="Kakko";
 	#num=#num+1;
 
@@ -147,6 +147,7 @@ UnixWordRubout:
 	return ;
 
 Kakko:
+	execmacro macrodir+"\\cmdDeleteBetweenKakko.mac";
 	return ;
 
 Tag:
